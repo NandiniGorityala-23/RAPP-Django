@@ -1,0 +1,244 @@
+{% load static %}
+{% load user_tags %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Main styles for this application-->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/font.css'%}" type="text/css"/>
+    <!-- <link rel="stylesheet" href="{% static 'css/font-awesome.min.css'%}" type="text/css"/> -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/simple-icons.css'%}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/mSnackbar.css'%}" type="text/css">
+    <link rel="stylesheet" href="{% static 'bootstrap/dist/css/bootstrap-slider.css'%}" type="text/css">
+    <link rel="stylesheet" href="{% static 'bootstrap/dist/css/bootstrap-datepicker3.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/jquery-confirm.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/dataTables.bootstrap4.min.css'%}"/>
+    
+    <script type="text/javascript" src="{% static 'js/jquery-min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'js/main.js'%}"></script>
+    <script type="text/javascript" src="{% static 'js/login.js'%}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap/dist/js/bootstrap.min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'js/ui.min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'js/coreui.min.js'%}"></script>
+    <!-- slider -->
+    <script src="{% static 'bootstrap/dist/js/bootstrap-slider.js' %}"></script>
+    <script src="{% static 'bootstrap/dist/js/bootstrap-slider.min.js' %}" type="text/javascript"></script>
+
+    <!-- Bootstrap Date-Picker Plugin -->
+    <script type="text/javascript" src="{% static 'bootstrap/dist/js/bootstrap-datepicker.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/tag-suggest.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/mSnackbar.min.js' %}"></script>
+    
+    <script type="text/javascript" src="{% static 'js/jquery.dataTables.min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'js/dataTables.bootstrap4.min.js'%}"></script>
+
+    <script type="text/javascript" src="{% static 'js/jquery-confirm.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/my_script.js' %}"></script>
+    <script  type="text/javascript" src="{% static 'bootstrap/dist/js/bootstrap3-typeahead.js' %}"></script>
+
+    
+    
+
+    {% block title %}<title>Recruitment App</title>{% endblock %}
+  </head>
+  <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+    <header class="app-header navbar">
+      <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <a class="navbar-brand" href="#">
+        <img class="navbar-brand-full" src="{% static 'img/msys.png' %}" width="90" height="50">
+        <img class="navbar-brand-minimized" src="{% static 'img/msys-icon.png' %}" width="45" height="45">
+      </a>
+      <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button" data-toggle="sidebar-lg-show">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <ul class="nav navbar-nav ml-auto">
+      <li class="nav-item">
+          <a href="{% static 'MSys%20Recruitment%20App%20User%20Guide_Draft.pdf' %}" target="_blank">
+                <i class="fa fa-question-circle" style="font-size:25px"></i>
+              </a>
+
+      </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+            <img class="img-avatar" src="{% static 'img/user.png' %}">
+            <span>{{request.user.username}}</span>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right">
+            <div class="dropdown-header text-center">
+              <strong>Settings</strong>
+            </div>
+            <!--<a class="dropdown-item" href="{%url 'get_profile'%}">-->
+              <!--<i class="fa fa-user"></i> Profile</a>-->
+            <a class="dropdown-item" href="{%url 'change_password' %}">
+              <i class="fa fa-wrench"></i> Settings</a>
+            <!--<a class="dropdown-item" href="#">-->
+              <!--<i class="fa fa-file"></i> Projects-->
+              <!--&lt;!&ndash; <span class="badge badge-primary">42</span> &ndash;&gt;-->
+            <!--</a>-->
+            <div class="divider"></div>
+            <!-- <a class="dropdown-item" href="#">
+              <i class="fa fa-shield"></i> Lock Account</a> -->
+            <a class="dropdown-item" href="{% url 'logout' %}">
+              <i class="fa fa-lock"></i> Logout</a>
+          </div>
+        </li>
+      </ul>
+    </header>
+    <div class="app-body">
+      <div class="sidebar">
+        <nav class="sidebar-nav">
+          <ul class="nav">
+            {% if request.user|has_group:'PM' or request.user|has_group:'RMG' or request.user|has_group:'HR'%}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'home' %}">
+                <i class="nav-icon icon-speedometer"></i> Dashboard
+              </a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'get_candidates'%}">
+                <i class="nav-icon icon-bell"></i> Candidates
+              </a>
+            </li>
+            {% endif %}
+            {% if request.user|has_group:'PM' and request.user|has_group:'RMG'%}
+            <li class="nav-item nav-dropdown">
+              <a class="nav-link nav-dropdown-toggle" href="#">
+                <i class="nav-icon icon-puzzle"></i> Initiator Actions</a>
+              <ul class="nav-dropdown-items">
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'position_list' %}">
+                    <i class="nav-icon icon-doc"></i>New Positions</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'add_client'%}">
+                    <i class="nav-icon icon-bell"></i> Add Client
+                  </a>
+                </li>
+
+              </ul>
+            </li>
+            <li class="nav-item nav-dropdown">
+              <a class="nav-link nav-dropdown-toggle" href="#">
+                <i class="nav-icon icon-bell"></i> Approver Actions</a>
+              <ul class="nav-dropdown-items">
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'approvals' %}">
+                    <i class="nav-icon icon-bell"></i> My Approvals</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'rgm_approvals' %}">
+                    <i class="nav-icon icon-bell"></i> Approved by me</a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item">
+                  <a class="nav-link" href="{% url 'get_candidates'%}">
+                    <i class="nav-icon icon-bell"></i> Candidates
+                  </a>
+            </li>
+            <li class="nav-item">
+                   <a class="nav-link" href="{% url 'get_team_member'%}">
+                   <i class="nav-icon fas fa-user-friends"></i> Team Members
+                   </a>
+            </li>
+            {%endif%}
+
+
+            {% if request.user|has_group:'PM' and request.user.groups.all|length == 1 %}
+            <li class="nav-item nav-dropdown">
+              <a class="nav-link nav-dropdown-toggle" href="#">
+                <i class="nav-icon icon-puzzle"></i> Initiator Actions</a>
+              <ul class="nav-dropdown-items">
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'position_list' %}">
+                    <i class="nav-icon icon-doc"></i>New Positions</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'get_candidates'%}">
+                    <i class="nav-icon icon-bell"></i> Candidates
+                  </a>
+                </li>
+                <li class="nav-item">
+                   <a class="nav-link" href="{% url 'get_team_member'%}">
+                   <i class="nav-icon fas fa-user-friends"></i> Team Members
+                   </a>
+                </li>
+              </ul>
+            </li>
+            {% endif %}
+
+
+            {% if request.user|has_group:'RMG' and request.user.groups.all|length == 1 %}
+            <li class="nav-item nav-dropdown">
+              <a class="nav-link nav-dropdown-toggle" href="#">
+                <i class="nav-icon icon-bell"></i> Approver Actions</a>
+              <ul class="nav-dropdown-items">
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'approvals' %}">
+                    <i class="nav-icon icon-bell"></i> My Approvals</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'rgm_approvals' %}">
+                    <i class="nav-icon icon-bell"></i> Approved by me</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'get_candidates'%}">
+                    <i class="nav-icon icon-bell"></i> Candidates
+                  </a>
+                </li>
+                <li class="nav-item">
+                   <a class="nav-link" href="{% url 'get_team_member'%}">
+                   <i class="nav-icon fas fa-user-friends"></i> Team Members
+                   </a>
+                </li>
+              </ul>
+            </li>
+            {% endif %}
+
+
+
+            {% if request.user|has_group:'HR' and request.user.groups.all|length == 1 %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'hr_approvals' %}">
+                <i class="nav-icon icon-speedometer"></i> HR Approver
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'get_candidates'%}">
+                <i class="nav-icon icon-bell"></i> Candidates
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'get_team_member'%}">
+                <i class="nav-icon fas fa-user-friends"></i> Team Members
+              </a>
+            </li>
+            {% endif %}
+          </ul>
+        </nav>
+        <button class="sidebar-minimizer brand-minimizer" type="button"></button>
+      </div>
+      {% block body %}{% endblock %}
+      <!-- <div id="page-content-wrapper">
+        <div class="container-fluid xyz">
+          <div class="row">
+            <div class="col-lg-12"> -->
+              {% block content %}{% endblock %}
+<!--             </div> 
+          </div>
+        </div> -->
+    </div>
+ <!--    <footer class="app-footer">
+      <div>
+        <a href="https://msystechnologies.com/">Msys Technology</a>
+        <span>&copy; 2018.</span>
+      </div>
+    </footer> -->
+    <!-- Bootstrap and necessary plugins-->
+
+  </body>
+</html>

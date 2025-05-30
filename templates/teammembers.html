@@ -1,0 +1,30 @@
+{% extends 'base.html' %} {% block content %}
+<main class="main">
+       <div class="col py-4">
+    <div class="table-responsive">
+                <table id="example" class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th nowrap>Emp. Id.</th>
+                            <th nowrap>Emp. Name</th>
+                            <th nowrap>Emp  mail</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for team in teammembers %}
+                    <tr>
+                            {% if team.emp_id == null %}
+                            <td nowrap></td>
+                            {% else %}
+                            <td nowrap>{{team.emp_id}}</td>
+                            <td nowrap>{{team.name}}</td>
+                            <td nowrap>{{team.msysemail}}</td>
+                            {% endif %}
+                    </tr>
+                        {%endfor%}
+                    </tbody>
+                </table>
+            </div>
+       </div>
+</main>
+{% endblock %}

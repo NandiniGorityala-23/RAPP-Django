@@ -1,0 +1,28 @@
+{% load static %}
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+		<link rel="stylesheet" href="{% static 'css/font.css'%}" type="text/css"/>
+		<link rel="stylesheet" href="{% static 'css/font-awesome.min.css'%}" type="text/css"/>
+		<script type="text/javascript" src="{% static 'js/jquery-1.12.4.min.js'%}"></script>
+		<script type="text/javascript" src="{% static 'js/main.js'%}"></script>
+		<script type="text/javascript" src="{% static 'js/login.js'%}"></script>
+	</head>
+<body>
+	<div class="background"></div>
+	<div class="backdrop"></div>
+	<div class="login-form-container" id="login-form">
+		<div class="login-form-content">
+			<div class="login-form-header">
+                <h3>Register</h3>
+            </div>
+                <form method="POST" class="register-form">{% csrf_token %}
+                <div class="wrapper">
+                {{form.as_p}}
+                <input type="submit" name="register" value="Register" class="button"/>
+                </div>
+                </form>
+        </div>
+    </div>
+    </body>
+</html>

@@ -1,0 +1,393 @@
+{% extends 'base.html' %} {% block content %} {% load static %}
+<main class="main breadcrumb">
+    <div class="col">
+        <div class="row">
+            <div class="col-12  p-0">
+                <div class="card bg-success text-white details-view-emp-card">
+                    
+                    {% for val in response.data %}
+                    <div class="card-body ">
+                        <div class="row">
+                            <div class="col-4">
+                                <table class="col">
+                                    <tr>
+                                        <th>Requisition No.</th>
+                                        <td>: {{val.rec_id}}</td>
+                                        
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-4">
+                                <table class="col">
+                                    <tr>
+                                        <th>No. of Positions</th>
+                                        <td>: {{val.no_of_positions}}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-4">
+                                <table class="col">
+                                    <tr>
+                                        <th>Client Name</th>
+                                        <td>: {{val.client}}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">
+                                <table class="col">
+                                    <tr>
+                                        <th>Project Name</th>
+                                        <td>: {{val.project}}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-4">
+                                <table class="col">
+                                    <tr>
+                                        <th>Project Manager</th>
+                                        <td>: {{val.pm_name}}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-4">
+                                <table class="col">
+                                    <tr>
+                                        <th>Designation</th>
+                                        <td>: {{val.designation}}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">
+                                <table class="col">
+                                    <tr>
+                                        <th>Experience Level (Yrs)</th>
+                                        <td>: {{val.experience}}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-4">
+                                <table class="col">
+                                    <tr>
+                                        <th>Skills</th>
+                                          <td>: {{val.skill_set}}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            
+                            <div class="col-4">
+                                <table class="col">
+                                    <tr>
+                                        <th>Business Category</th>
+                                        <td>: {{val.request_type}}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+              
+                </div>
+            </div>
+            {%if type == 'New' %}
+            <div class="col-12">
+                <button type="button" class="btn btn-info btn-lg float-right" data-toggle="modal" data-target="#myModal" id="new_modal">
+                    <i class="fa fa-plus">&nbsp;New Candidate</i>
+                </button>
+            </div>
+            {%endif%}
+        </div>
+        <div class="col py-5 table-responsive">
+            <table id="example" class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th style="display:none">Can. Id.</th>
+                        <th nowrap>Emp. Id.</th>
+                        <th nowrap>Emp. Name</th>
+                        <th>Skills</th>
+                        <!-- <th>Emp. Type</th> -->
+                        <th nowrap>Notice Period</th>
+                        <th nowrap>Current CTC</th>
+                        <th nowrap>Expected CTC</th>
+                        <th nowrap>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for value in val.candidates %}
+                   <tr>
+                        <td style="display:none">{{value.c_id}}</td>
+                        {% if value.emp_id == null %}
+                            <td nowrap></td>
+                            {% else %}
+                            <td nowrap>{{value.emp_id}}</td>
+                        {% endif %}
+                        <td nowrap>{{value.name}}</td>
+                        <td nowrap>{{value.skill_set}}</td>
+                        {% if value.notice_period == null %}
+                            <td nowrap></td>
+                            {% else %}
+                            <td nowrap>{{value.notice_period}}</td>
+                        {% endif %}
+
+                        {% if value.current_ctc == null %}
+                            <td nowrap></td>
+                            {% else %}
+                            <td nowrap>{{value.current_ctc}}</td>
+                        {% endif %}
+                          {% if value.current_ctc == null %}
+                            <td nowrap></td>
+                            {% else %}
+                            <td nowrap>{{value.expected_ctc}}</td>
+                        {% endif %}
+                        <td nowrap>{{value.status}}</td>
+                        <td nowrap>
+                            {% if value.hr_approved == "" and value.can_feedback_cnt > 0 %}
+                            <a href="#">
+                                <span class="icon-box-2x" data-toggle="modal" data-target="#candidate_status_Modal" id="new_modal"  onclick="candidate_approval('{{value.c_id}}','{{val.rec_id}}' )">
+                                    <span class="tooltip-md" data-tooltip="Approve Candidate">
+                                        <i class="fa fa-check-circle"></i>
+                                    </span>
+                                </span>
+                            </a>
+                            {% endif %}
+                            {% if value.status != "REJECTED" %}
+                            <a href="#">
+                                <span class="icon-box-2x" data-toggle="modal" data-target="#interview_Modal" id="new_modal" onclick="interviewer_details('{{val.rec_id}}','{{value.c_id}}')">
+                                <span class="tooltip-md" data-tooltip="Schedule Interview">
+                                    <i class="fa fa-calendar-alt"></i>
+                                </span>
+                                </span>
+                            </a>
+                            {% endif %}
+                            {% if value.file_upload != "None" %}
+                                <a href="/static/doc/{{value.file_upload}}" target="_blank">
+                                    <span class="icon-box-2x tooltip-sm" data-tooltip="Resume">
+                                        <i class="far fa-file-word"></i>
+                                    </span>
+                                </a>
+                            {% endif %}
+                            {% if value.can_feedback_cnt > 0 %}
+                            <a href="#">
+                                <span class="icon-box-2x feedback-icon" data-toggle="modal" data-target="#interviewer_feedback" id="new_modal" data-count="{{value.can_feedback_cnt}}" onclick="interviewer_feedback('{{val.rec_id}}','{{value.c_id}}')">
+                                    <span class="tooltip-md" data-tooltip="Candidate Feedback">
+                                        <i class="far fa-comment-alt" ></i>
+                                    </span>
+                                </span>
+                            </a>
+                            {% endif %}
+                           <!--  <a href="#">
+                                <span class="icon-box-2x tooltip-sm" data-tooltip="Delete" onclick="deleteForm()">
+                                    <i class="fa fa-trash-alt" ></i>
+                                </span>
+                            </a> -->
+
+                    </tr>
+                    {%endfor%}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-12">
+            <div class="modal fade" id="myModal" role="dialog">
+                <div class="modal-dialog modal-dialog-body">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title-header">Add New Candidate</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container">
+                                <form enctype="multipart/form-data" method="post" id="candidateform" class="candidateform" role="form" action="#" novalidate="">
+                                    {% csrf_token %}
+                                    <div class="form-group row">
+                                       	<label class="col-sm-2 col-form-label">Employee Type</label>
+                                       	<div class="radio">
+
+									      	<label class="col-sm-2">
+										      <input type="radio" id ="emp_internal" name="emp_internal" value="1" checked/> Internal
+										    </label>
+										    <label class="col-sm-2">
+										      <input type="radio" id ="emp_internal" name="emp_internal" value="0"/>External
+										    </label>
+									    </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Emp Id <span class="red">*</span></label>
+                                        <div class="col-sm-4">
+                                            <input type="text" name="emp_id" placeholder="(e.g) M123-2018" maxlength="20" class="form-control" id="emp_id"/>
+                                        </div>
+                                        <label class="col-sm-2 col-form-label">Candidate Name<span class="red">*</span></label>
+                                        <div class="col-sm-4">
+                                            <input type="text" name="emp_name"  placeholder="Employee Name" maxlength="30" class="form-control" id="emp_name" required/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                       
+                                        <label class="col-sm-2 col-form-label">Skills <span class="red">*</span></label>
+                                        <div class="col-sm-4">
+                                            <input id="skills" type="text" name="skills" />
+                                        </div>
+                                        <label class="col-sm-2 col-form-label">Resume</label>
+                                        <div class="col-sm-4">
+	   										<input type="file" class="form-control-file" id="file_upload" name="file_upload" accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" aria-invalid="true">
+									   	</div>
+                                    </div>
+                                   <div class="form-group row notice_details" >
+                                        <label class="col-sm-2 col-form-label">Notice Period (days)<span class="red">*</span></label>
+                                        <div class="col-sm-4">
+                                            <input type="number" name="notice_period" class="form-control" min="1" max="100" onKeyPress="if(this.value.length >= 3) return false;" id="notice_period"/>
+                                        </div>
+                                        <!-- <label class="col-sm-2 col-form-label">Status <span class="red">*</span></label>
+                                        <div class="col-sm-4">
+                                            <input type="text" name="status" class="form-control" id="status"/>
+                                        </div> -->
+                                        <label class="col-sm-2 col-form-label">Current CTC (lakhs)<span class="red">*</span> </label>
+                                        <div class="col-sm-4">
+                                            <input type="number" name="current_ctc" placeholder="Current ctc" maxlength="9" class="form-control" id="current_ctc" step="any" onKeyPress="if(this.value.length >= 4) return false;"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row ctc_dtails">
+                                        <label class="col-sm-2 col-form-label">Expected CTC (lakhs)<span class="red">*</span></label>
+                                        <div class="col-sm-4">
+                                            <input type="number" name="expected_ctc" placeholder="Expected ctc" maxlength="9" class="form-control" id="expected_ctc" step="any" onKeyPress="if(this.value.length >= 4) return false;"/>
+                                        </div>
+                                    </div>
+                               </form>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn  btn-success btn-default" data-dismiss="modal" onclick="candidatesubmitForm(event,'{{val.rec_id}}')">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="modal fade" id="interview_Modal" role="dialog">
+                <div class="modal-dialog modal-dialog-body">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title-header">Add Interviewer Details</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container">
+                                <form enctype="multipart/form-data" method="post" id="interviewform" class="candidateform" role="form" action="#" novalidate="">
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Add Interviewer<span class="red">*</span></label>
+                                            <div class="col-sm-4">
+                                                <input type="text" id="interview_det" class="form-control" name="interview_det"/>
+                                            </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="date_time" class="col-2 col-form-label">Date and time<span class="red">*</span></label>
+                                           <div class="col-sm-4">
+                                                 <input class="form-control"type="datetime-local" value="2011-08-19  T13:45:00" id="date_time">
+                                           </div>
+                                    </div>
+                               </form>
+                            </div>
+                      <!--       <div class="container">
+                                <table id="candidate_interview" class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Interviewers</th>
+                                            <th>Ratings out of 5</th>
+                                            <th>Skills</th>
+                                            <th>Remarks</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead> 
+                                    <tbody></tbody>                                  
+                                </table>
+                            </div> -->
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn  btn-success btn-default" data-dismiss="modal" onclick="add_interview_details(event)">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+         <div class="col-12">
+            <div class="modal fade" id="interviewer_feedback" role="dialog">
+                <div class="modal-dialog modal-dialog-body">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title-header">Interviewer Feedback</h4>
+                        </div>
+                        <div class="modal-body">
+                            <table id="candidate_interview" class="table table-striped table-bordered">
+                                <thead>
+                                        <tr>
+                                            <th>Interviewers</th>
+                                            <th>Ratings out of 5</th>
+                                            <th>Skills</th>
+                                            <th>Remarks</th>
+                                             <th>Interview held on</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+
+                                        </tr>
+                                    </thead> 
+                                    <tbody></tbody>                                  
+                                </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn  btn-success btn-default" data-dismiss="modal" onclick="add_interview_details(event)">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="modal fade" id="candidate_status_Modal" role="dialog">
+                <div class="modal-dialog modal-dialog-body">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title-header">Candidate Status & Remarks</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container">
+                                <form enctype="multipart/form-data" method="post" id="candidate_status_form" class="candidate_status_form" role="form" action="#" novalidate="">
+                                    {% csrf_token %}
+                                     <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Status<span class="red">*</span></label>
+                                           <div class="col-sm-4">
+                                            <select class="form-control" id="candidate_status" name="candidate_status">
+                                                    <option value="1">Selected</option>
+                                                    <option value="0">Rejected</option>
+                                            </select>
+                                        </div>    
+                                        <label class="col-sm-2 col-form-label">Remarks<span class="red">*</span></label>
+                                           <div class="col-sm-4">
+                                            <textarea maxlength="250" class="form-control" id="candidate_comments" name="candidate_comments" rows="5" required></textarea>
+                                        </div>                                    
+                                     </div>
+                               </form>
+                            </div>
+                        </div>
+                         <div class="modal-footer">
+                            <button type="button" class="btn btn-danger btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn  btn-success btn-default" data-dismiss="modal" 
+                            onclick="add_candidate_remarks(
+                                event, 
+                                '{{val.no_of_positions}}', 
+                                '{{val.selected_candidate_count}}')">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+          {%endfor%}
+</main>
+{% endblock %}

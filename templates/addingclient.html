@@ -1,0 +1,78 @@
+{% extends 'base.html' %} {% block content %}
+<main class="main">
+   <div class="col py-4">
+       <div class="row ">
+           <div class="col-12">
+               <button type="button" class="btn btn-info btn-lg float-right" data-toggle="modal" data-target="#myModal" id="add_new_client">
+                   <i class="fa fa-plus">Add New Client</i>
+               </button>
+               <div class="table-responsive">
+                   <table id="example" class="table table-striped table-bordered">
+                       <thead>
+                            <tr>
+                                <th nowrap>Client Name</th>
+                                <th nowrap>Client Location</th>
+                                <th nowrap>Project Name</th>
+                                <th nowrap>Project Manager Id</th>
+                            </tr>
+                       </thead>
+                       <tbody>
+                            {%for project in project_list %}
+                            <tr>
+                                <td nowrap>{{project.client_code.client_name}}</td>
+                                <td nowrap>{{project.client_code.client_location}}</td>
+                                <td nowrap>{{project.projectname}}</td>
+                                <td nowrap>{{project.pm_emp_id}}</td>
+                            </tr>
+                            {%endfor%}
+                       </tbody>
+                   </table>
+               </div>
+           </div>
+                <div class="col-12">
+                <div class="modal fade" id="myModal" role="dialog">
+                    <div class="modal-dialog modal-dialog-body">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title-header">Add New Client</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="container">
+                                    <form enctype="multipart/form-data" method="post" id="clientform" class="clientform" role="form" action="#" novalidate="">
+                                        {% csrf_token %}
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label">Client Name<span class="red">*</span></label>
+                                            <div class="col-sm-4">
+                                                <input type="text" name="cli_name" placeholder="Client Name"  maxlength="20" class="form-control" id="cli_name"/>
+                                            </div>
+                                            <label class="col-sm-2 col-form-label">Client Location<span class="red">*</span></label>
+                                            <div class="col-sm-4">
+                                                <input type="text" name="cli_location" placeholder="Client Location" maxlength="30" class="form-control" id="cli_location"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label">Project Name<span class="red">*</span></label>
+                                            <div class="col-sm-4">
+                                                <input type="text" name="project_name" placeholder="Project Name"  maxlength="20" class="form-control" id="project_name"/>
+                                            </div>
+                                            <label class="col-sm-2 col-form-label">Project Manager ID<span class="red">*</span></label>
+                                            <div class="col-sm-4">
+                                                <input type="text" name="project_manager" placeholder="PM Employee ID" maxlength="30" class="form-control" id="project_manager"/>
+                                            </div>
+                                        </div>
+                                   </form>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger btn-default" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn  btn-success btn-default" data-dismiss="modal" onclick="addclientform(event)">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+   </div>
+</main>
+{% endblock %}

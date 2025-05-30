@@ -1,0 +1,167 @@
+{% extends 'base.html' %} {% block content %} {% load static %}
+<main class="main breadcrumb">
+	<div class="col">
+		<div class="row ">
+			<div class="col-12">
+				<div class="modal fade" id="approvalModal" role="dialog">
+					<div class="modal-dialog modal-dialog-body">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+								<h4 class="modal-title-header">New Positions Details</h4>
+							</div>
+							<div class="modal-body">
+								<div class="container">
+									<div class="form-group row">
+										<label class="col-sm-2 col-form-label">No. of Positions</label>
+										<div class="col-sm-4">
+											<input class="form-control" id="no_of_positions" type="text" name="no_of_positions" disabled/>
+										</div>
+										<label class="col-sm-2 col-form-label">Experience Level (Yrs)</label>
+										<div class="col-sm-4">
+											<input type="text" class="form-control" id="experience" disabled/>
+										</div>
+									</div>
+
+									<div class="form-group row">
+										<label class="col-sm-2 col-form-label">Qualification</label>
+										<div class="col-sm-4">
+											<input type="text" class="form-control" id="qualification" disabled/>
+										</div>
+										<label class="col-sm-2 col-form-label">Designation</label>
+										<div class="col-sm-4">
+											<input type="text" class="form-control" id="designation" disabled/>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label class="col-sm-2 col-form-label">Demand Type</label>
+										<div class="col-sm-4">
+											<input type="text" class="form-control" id="demand_type" disabled/>
+										</div>
+										<label class="col-sm-2 col-form-label">Client Interview </label>
+										<div class="radio">
+											<label class="col-sm-2">
+												<input type="radio" id="client_interview_yes" name="client_interview" value="1" /> Yes
+											</label>
+											<label class="col-sm-2 client_interview">
+												<input type="radio" id="client_interview_no" name="client_interview" value="0" />No
+											</label>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label class="col-sm-2 col-form-label">Job</label>
+										<div class="col-sm-4">
+											<input id="job_type" type="text" name="job_type" class="form-control" disabled/>
+										</div>
+										<label class="col-sm-2 col-form-label">Location</label>
+										<div class="col-sm-4">
+											<input id="location" type="text" name="location" class="form-control" disabled/>
+										</div>
+									</div>
+									<div class="form-group row client_bill_details">
+										<label class="col-sm-2 col-form-label">Billable</label>
+
+										<div class="radio col-sm-4">
+											<label class="col-sm-2 checkbox-inline">
+												<input type="radio" id="billing_type_yes" name="billing_type" value="1" disabled/> Yes
+											</label>
+											<label class="col-sm-2 checkbox-inline">
+												<input type="radio" id="billing_type_no" name="billing_type" value="0" disabled/>No
+											</label>
+										</div>
+										<label class="col-sm-2 col-form-label billing_date">Billing Start Date(BSD)</label>
+										<div class="col-sm-4 billing_date">
+											<input class="form-control bill_start_date" id="date" name="bill_date" type="text" disabled/>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label class="col-sm-2 col-form-label">Interviewer Details</label>
+								 		<div class="col-sm-4">
+											<textarea id="interview_details" class="form-control" name="interview_details" rows="5" disabled/>
+									   		</textarea>
+										</div>
+										<label class="col-sm-2 col-form-label">Job Description</label>
+										<div class="col-sm-4">
+											<textarea class="form-control" id="job_description" name="job_description" rows="5" maxlength="500" disabled></textarea>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-danger btn-default" data-dismiss="modal">Close</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col py-5 table-responsive">
+				<table id="example" class="table table-striped table-bordered">
+					<thead>
+						<tr>
+							<th nowrap>Requisition No.</th>
+							<th nowrap>Requisition Date</th>
+							<th nowrap>Client name</th>
+							<th nowrap>Project Name</th>
+							<th nowrap>Project Manager </th>
+							<th>Skills</th>
+							<!-- <th nowrap>Business Category</th> -->
+							<th nowrap>No.of Positions</th>
+							<th>Pending with</th>
+							<th>Status</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for key, val in response.items %} {% for emp_id,job_det in val.items %} {% for details in job_det %}
+						<tr>
+							<td nowrap>{{details.rec_id}}</td>
+							<td nowrap>{{details.rec_date}}</td>
+							<td nowrap>{{details.client_name}}</td>
+							<td nowrap>{{details.project_name}}</td>
+							<td nowrap>{{details.employee_name}}</td>
+							<td >{{details.skills}}</td>
+							<td nowrap>{{details.no_of_positions}}</td>
+							<!-- <td nowrap>{{details.request_type}}</td> -->
+							<td nowrap>{{details.approved_by}}</td>
+							{% if details.status == True %}
+							<td>Open</td>
+							{% else %}
+							<td>Closed</td>
+							{% endif %}
+							<td nowrap>
+								<a href="{{ details.rec_id }}/New">
+									<span class="icon-box-4x tooltip-md" data-tooltip="Add Candidates">
+										<i class="fa fa-user-plus"></i>
+									</span>
+								</a>
+								<a href="#">
+									<span class="icon-box-4x tooltip-sm" data-tooltip="Info" onclick="info_box('{{ details.rec_id }}')">
+										<i class="fa fa-info-circle" ></i>
+									</span>
+								</a>
+								{% if details.candidate_count > 0 %}
+								<a href="{{details.rec_id}}/List">
+                        			<span class="icon-box-2x feedback-icon" data-toggle="modal" data-target="#postion_interviewed" id="new_modal" data-count="{{details.candidate_count}}">
+										<span class="tooltip-md" data-tooltip="Candidates interview list">
+											<i class="far fa-comment-alt" ></i>
+										</span>
+									</span>
+								</a>
+								{%endif%}
+								<!-- <a href="#">
+									<span class="icon-box-4x">
+										<i class="fa fa-trash-alt" onclick="deleteForm()"></i>
+									</span>
+								</a> -->
+							</td>
+						</tr>
+						{% endfor%} {% endfor%} {% endfor%}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</main>
+{% endblock %}

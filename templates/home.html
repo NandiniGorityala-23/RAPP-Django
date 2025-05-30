@@ -1,0 +1,229 @@
+{% extends 'base.html' %} {% block body %} {% load user_tags %}
+<main class="main breadcrumb">
+    <div class="container-fluid">
+        <div class="animated fadeIn">
+            <div class="row">
+                {% if request.user|has_group:'PM' and request.user|has_group:'RMG'%}
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card text-white bg-primary">
+                        <a class="text-white" href="{% url 'position_list' %}">
+                        <div class="card-body pb-0">
+                            <div class="text-value">{{count.job_count}}</div>
+                            <div>No. of requistions (PM)</div>
+                        </div>
+                        <div class="chart-wrapper mt-3 mx-3" style="height:70px;">
+                            <canvas id="card-chart1" class="chart" height="70"></canvas>
+                        </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card text-white bg-primary">
+                        <a class="text-white" href="{% url 'rgm_approvals' %}">
+                        <div class="card-body pb-0">
+                            <div class="text-value">{{count.rmg_job_count}}</div>
+                            <div>No. of requistions (RMG)</div>
+                        </div>
+                        <div class="chart-wrapper mt-3 mx-3" style="height:70px;">
+                            <canvas id="card-chart1" class="chart" height="70"></canvas>
+                        </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card text-white bg-warning">
+                        <a class="text-white" href="{% url 'approvals' %}">
+                        <div class="card-body pb-0">
+                            <div class="text-value">{{ count.rmg_approval_pending }}</div>
+                            <div>No of approval pending</div>
+                        </div>
+                        <div class="chart-wrapper mt-3" style="height:70px;">
+                            <canvas id="card-chart3" class="chart" height="70"></canvas>
+                        </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card text-white bg-info">
+                        <div class="card-body pb-0">
+                            <!-- <button type="button" class="btn btn-transparent p-0 float-right">
+                      <i class="icon-location-pin"></i>
+                    </button> -->
+
+                            <div class="text-value">{{count.billing_status}}</div>
+                            <div>Bench Members</div>
+                        </div>
+                        <div class="chart-wrapper mt-3 mx-3" style="height:70px;">
+                            <canvas id="card-chart2" class="chart" height="70"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card text-white bg-info">
+                        <div class="card-body pb-0">
+                            <!-- <button type="button" class="btn btn-transparent p-0 float-right">
+                      <i class="icon-location-pin"></i>
+                    </button> -->
+                            {%if count.openings_count > 0%}
+                            <div class="text-value">{{count.openings_count}}</div>
+                            <div>No. of openings</div>
+                            {%else%}
+                            <div class="text-value">0</div>
+                            <div>No. of openings</div>
+                            {%endif%}
+                        </div>
+                        <div class="chart-wrapper mt-3 mx-3" style="height:70px;">
+                            <canvas id="card-chart2" class="chart" height="70"></canvas>
+                        </div>
+                    </div>
+                </div>
+                {%endif%}
+
+                {% if request.user|has_group:'PM' and request.user.groups.all|length == 1 %}
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card text-white bg-primary">
+                        <a class="text-white" href="{% url 'position_list' %}">
+                        <div class="card-body pb-0">
+                            <div class="text-value">{{count.job_count}}</div>
+                            <div>No. of requistions</div>
+                        </div>
+                        <div class="chart-wrapper mt-3 mx-3" style="height:70px;">
+                            <canvas id="card-chart1" class="chart" height="70"></canvas>
+                        </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card text-white bg-info">
+                        <div class="card-body pb-0">
+                            <!-- <button type="button" class="btn btn-transparent p-0 float-right">
+                      <i class="icon-location-pin"></i>
+                    </button> -->
+                            {%if count.openings_count > 0%}
+                            <div class="text-value">{{count.openings_count}}</div>
+                            <div>No. of openings</div>
+                            {%else%}
+                            <div class="text-value">0</div>
+                            <div>No. of openings</div>
+                            {%endif%}
+                        </div>
+                        <div class="chart-wrapper mt-3 mx-3" style="height:70px;">
+                            <canvas id="card-chart2" class="chart" height="70"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card text-white bg-warning">
+                        <div class="card-body pb-0">
+                            <div class="text-value">{{ count.project_count }}</div>
+                            <div>Project Handling</div>
+                        </div>
+                        <div class="chart-wrapper mt-3" style="height:70px;">
+                            <canvas id="card-chart3" class="chart" height="70"></canvas>
+                        </div>
+                    </div>
+                </div>
+                {%endif%}
+                {% if request.user|has_group:'RMG' and request.user.groups.all|length == 1 %}
+                 <div class="col-sm-6 col-lg-3">
+                    <div class="card text-white bg-primary">
+                        <a class="text-white" href="{% url 'rgm_approvals' %}">
+                        <div class="card-body pb-0">
+                            <div class="text-value">{{count.rmg_job_count}}</div>
+                            <div>No. of requistions</div>
+                        </div>
+                        <div class="chart-wrapper mt-3 mx-3" style="height:70px;">
+                            <canvas id="card-chart1" class="chart" height="70"></canvas>
+                        </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card text-white bg-info">
+                        <div class="card-body pb-0">
+                            <!-- <button type="button" class="btn btn-transparent p-0 float-right">
+                      <i class="icon-location-pin"></i>
+                    </button> -->
+
+                            <div class="text-value">{{count.billing_status}}</div>
+                            <div>Bench Members</div>
+                        </div>
+                        <div class="chart-wrapper mt-3 mx-3" style="height:70px;">
+                            <canvas id="card-chart2" class="chart" height="70"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card text-white bg-warning">
+                        <a class="text-white" href="{% url 'approvals' %}">
+                        <div class="card-body pb-0">
+                            <div class="text-value">{{ count.rmg_approval_pending }}</div>
+                            <div>No of approval pending</div>
+                        </div>
+                        <div class="chart-wrapper mt-3" style="height:70px;">
+                            <canvas id="card-chart3" class="chart" height="70"></canvas>
+                        </div>
+                        </a>
+                    </div>
+                </div>
+                {%endif%}
+                {% if request.user|has_group:'HR' and request.user.groups.all|length == 1 %}
+                 <div class="col-sm-6 col-lg-3">
+                    <div class="card text-white bg-primary">
+                        <a class="text-white" href="{% url 'hr_approvals' %}">
+                        <div class="card-body pb-0">
+                            <div class="text-value">{{count.hr_job_count}}</div>
+                            <div>No. of requistions</div>
+                        </div>
+                        <div class="chart-wrapper mt-3 mx-3" style="height:70px;">
+                            <canvas id="card-chart1" class="chart" height="70"></canvas>
+                        </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card text-white bg-info">
+                        <div class="card-body pb-0">
+                            <!-- <button type="button" class="btn btn-transparent p-0 float-right">
+                      <i class="icon-location-pin"></i>
+                    </button> -->
+
+                            <div class="text-value">{{count.billing_status}}</div>
+                            <div>Bench Members</div>
+                        </div>
+                        <div class="chart-wrapper mt-3 mx-3" style="height:70px;">
+                            <canvas id="card-chart2" class="chart" height="70"></canvas>
+                        </div>
+                    </div>
+                </div>
+                 <div class="col-sm-6 col-lg-3">
+                    <div class="card text-white bg-warning">
+                        <div class="card-body pb-0">
+                            <div class="text-value">{{ count.employee_count}}</div>
+                            <div>No of employees</div>
+                        </div>
+                        <div class="chart-wrapper mt-3" style="height:70px;">
+                            <canvas id="card-chart3" class="chart" height="70"></canvas>
+                        </div>
+                    </div>
+                </div>
+                {%endif%}
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card text-white bg-danger">
+                        <div class="card-body pb-0">
+                             <a class="text-white" href="{% url 'get_team_member' %}">
+                            <div class="text-value">{{count.team_count}}</div>
+                            <div>Team Members</div>
+                             </a>
+                        </div>
+                        <div class="chart-wrapper mt-3 mx-3" style="height:70px;">
+                            <canvas id="card-chart4" class="chart" height="70"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <!--/.col-->
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

@@ -1,0 +1,282 @@
+{% extends 'base.html' %} {% block content %} {% load static %}{% load user_tags %}
+<main class="main">
+<!-- <ol class="col-12 breadcrumb">
+  <li class="breadcrumb-item">
+    <a href="{% url 'home' %}">Dashboard</a>
+  </li>
+
+  <li class="breadcrumb-item position">
+    <a href="{% url 'position_list' %}">New Position</a>
+  </li>
+</ol> -->
+    <div class="col py-4">
+        <div class="row ">
+            <div class="col-12">
+                <button type="button" class="btn btn-info btn-lg float-right" data-toggle="modal" data-target="#myModal" id="add_new_position">
+                    <i class="fa fa-plus">&nbsp;Add Requirement</i>
+                </button>
+                <div class="modal fade" id="myModal" role="dialog">
+                    <div class="modal-dialog modal-dialog-body">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title-header">Add New Positions</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="container">
+                                    <form enctype="multipart/form-data" method="post" id="tagform" class="tagForm" role="form" action="#" novalidate="">
+                                        {% csrf_token %}
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label">Client Name
+                                                <span class="tooltip-md" data-tooltip="Go to 'Add Client' to add new client">
+                                                    <i class="fa fa-info-circle"></i>
+                                                </span>
+                                                <span class="red">*</span>
+                                            </label>
+                                            <div class="col-sm-4">
+                                                <select class="form-control" id="client_name" name="client_name">
+                                                    {% for c in clients %}
+                                                    <option value='{{c.client_code}}'>{{c.client_name}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <label class="col-sm-2 col-form-label">Project Name
+                                                <span class="red">*</span>
+                                            </label>
+                                            <div class="col-sm-4">
+                                                <select class="form-control" id="project_name" name="project_code">
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label">No. of Positions
+                                                <span class="red">*</span>
+                                            </label>
+                                            <div class="col-sm-4">
+                                                <input type="number" onKeyPress="if(this.value.length >= 2) return false;" min="1" name="no_of_positions" class="form-control" id="no_of_positions" pattern="[0-9]" value="1" required/>
+                                                <div class="invalid-feedback">Please fill this field</div>
+                                            </div>
+                                            <label class="col-sm-2 col-form-label">Experience Level (Yrs)
+                                                <span class="red">*</span>
+                                            </label>
+                                            <div class="col-sm-4">
+                                                <input type="number" onKeyPress="if(this.value.length >= 2) return false;" min="0" max="50" name="experience" placeholder="(e.g : 2) Yrs." class="form-control" id="experience" pattern="[0-9]" value="1" required/>
+                                                <div class="invalid-feedback">Please fill this field</div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label">Qualification
+                                                <span class="red">*</span>
+                                            </label>
+                                            <div class="col-sm-4">
+                                                <select class="form-control" name="qualification" id="qualification">
+                                                    {% for q in qualification%}
+                                                    <option value='{{q.qualification}}'>{{q.qualification}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <label class="col-sm-2 col-form-label">Designation
+                                                <span class="red">*</span>
+                                            </label>
+                                            <div class="col-sm-4">
+                                                <select class="form-control" name="designation" id="designation">
+                                                    {% for d in designation %}
+                                                    <option value="{{d.designation}}">{{d.designation}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label">Demand Type
+                                                <span class="red">*</span>
+                                            </label>
+                                            <div class="col-sm-4">
+                                                <select class="form-control" name="demand_type" id="demand_type">
+                                                    <option value="REGULAR">REGULAR</option>
+                                                    <option value="CONTRACT">CONTRACT</option>
+                                                </select>
+                                            </div>
+                                            <label class="col-sm-2 col-form-label">Client Interview
+                                                <span class="red">*</span>
+                                            </label>
+                                            <div class="radio">
+                                                <label class="col-sm-2 checkbox-inline">
+                                                    <input type="radio" name="client_interview" id="client_interview_yes" value="1" checked /> Yes
+                                                </label>
+                                                <label class="col-sm-2 checkbox-inline">
+                                                    <input type="radio" name="client_interview" id="client_interview_no" value="0" />No
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label">Business Category
+                                                <span class="red">*</span>
+                                            </label>
+                                            <div class="col-sm-4">
+                                                <select class="form-control" name="request_type" id="request_type">
+                                                    {% for r in requesttype %}
+                                                    <option value="{{r.request_type}}">{{r.request_type}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <label class="col-sm-2 col-form-label">Skills
+                                                <span class="red">*</span>
+                                            </label>
+                                            <div class="col-sm-4">
+                                                <input id="skills" type="text" name="skills" />
+                                                <!-- <div class="valid-feedback">Success! You've done it.</div> -->
+                                                <div class="invalid-feedback-msg">Please fill this field</div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label">Job
+                                                <span class="red">*</span>
+                                            </label>
+                                            <div class="col-sm-4">
+                                                <select class="form-control" name="job_type" id="job_type">
+                                                    {% for j in job_type %}
+                                                    <option value="{{j.job_code}}">{{j.job_type}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <label class="col-sm-2 col-form-label">Location
+                                                <span class="red">*</span>
+                                            </label>
+                                            <div class="col-sm-4">
+                                                <select class="form-control" name="location" id="location">
+                                                    {% for l in location %}
+                                                    <option value="{{l.branch_name}}">{{l.branch_name}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row client_bill_details">
+                                            <label class="col-sm-2 col-form-label">Billable
+                                                <span class="red">*</span>
+                                            </label>
+                                            <div class="radio col-sm-4">
+                                                <label class="col-sm-2 checkbox-inline">
+                                                    <input type="radio" name="billing_type" id="billing_type_yes" value="1" checked /> Yes
+                                                </label>
+                                                <label class="col-sm-2 checkbox-inline">
+                                                    <input type="radio" name="billing_type" id="billing_type_no" value="0" />No
+                                                </label>
+                                            </div>
+                                            <label class="col-sm-2 col-form-label billing_date">Billing Start Date(BSD)</label>
+                                            <div class="col-sm-4 billing_date">
+                                                <input class="form-control bill_start_date" id="date" name="bill_date" type="text" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label">Interviewer Details <span class="red">*</span></label>
+                                            <div class="col-sm-4">
+                                                <input type="text" id="interview_det" class="form-control" name="interview_det" />
+                                            <!-- <div class="valid-feedback">Success! You've done it.</div> -->
+                                            <!-- <div class="invalid-feedback-msg">Please fill this field</div> -->
+                                            </div>
+                                            <label class="col-sm-2 col-form-label">Job Description</label>
+                                            <div class="col-sm-4">
+                                                <textarea class="form-control" id="job_description" name="job_description" rows="3" maxlength="250"></textarea>
+                                            </div>
+                                        </div>
+                                        <!-- <div class="form-group row"> -->
+                                        <!-- <div class="col-sm-6">
+	   										<input type="file" class="form-control-file" id="file_upload" name="file_upload" accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" aria-invalid="true">
+									   	</div> -->
+                                        <!-- <input type="file" class="form-control-file" id="file_upload" name="file_upload" accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" aria-invalid="true"> -->
+                                        <!-- </div> -->
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger btn-default" data-dismiss="modal" id="reset">Close</button>
+                                <button type="submit" class="btn  btn-success btn-default" data-dismiss="modal" onclick="submitForm(event)">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col py-4 table-responsive">
+                <table id="position_table" class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th nowrap>Requisition No.</th>
+                            <th nowrap>Requisition Date</th>
+                            <th nowrap>Client name</th>
+                            <th nowrap>Project Name</th>
+                            <th nowrap>Designation </th>
+                            <th>Skills</th>
+                            <th nowrap>No.of Positions</th>
+                            <!-- <th nowrap>Business Category</th> -->
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for details in response %}
+                        <tr>
+                            <td nowrap>{{details.rec_id}}</td>
+                            <!-- <td nowrap>{{details.file_upload}}</td> -->
+                            <td nowrap>{{details.date}}</td>
+                            <td nowrap>{{details.client}}</td>
+                            <td nowrap>{{details.project}}</td>
+                            <td nowrap>{{details.designation}}</td>
+                            <td>{{details.skills}}</td>
+                            <td nowrap>{{details.no_of_positions}}</td>
+                            <!-- <td nowrap>{{details.request_type}}</td> -->
+                            {% if details.status == True %}
+                            <td>Open</td>
+                            {% else %}
+                            <td>Closed</td>
+                            {% endif %}
+                            <td nowrap>
+                                {% if details.approved_by == 'Initiator' %}
+                                <a href="#">
+                                    <span class="feedback-box tooltip-md" data-tooltip="RMG Remarks" onclick="feedbackForm('RMG Remarks', '{{details.interview_remarks}}')">
+                                        <i class="far fa-comment-alt" ></i>
+                                    </span>
+                                </a> {% endif %}
+
+                                {% if details.status == True %}
+                                <a href="#">
+                                    <span id="icon" class="icon-box-2x tooltip-sm" data-tooltip="Edit" onclick="editPositionForm('{{ details.rec_id }}')">
+                                        <i class="fa fa-edit"></i>
+                                    </span>
+                                </a>
+                                {% endif %}
+
+                                {% if details.selected_candidate_count > 0 %}
+                                    <a href="/api/approvedcandidates/{{details.rec_id}}">
+                                        <span class="icon-box-2x badge-icon selected_cadidate" data-count="{{details.selected_candidate_count}}" onclick="approved_candidate_list('{{ details.rec_id }}')">
+                                            <span class="tooltip-md" data-tooltip="Selected Candidates">
+                                                <i class="fa fa-users"></i>
+                                            </span>
+                                        </span>
+                                    </a>
+                                {% endif %}
+                               <!--  {% if details.status == False %}
+                                <a href="#">
+                                    <span class="icon-box-4x tooltip-sm" data-tooltip="Info" onclick="editPositionForm('{{ details.rec_id }}')">
+                                        <i class="fa fa-info-circle" ></i>
+                                    </span>
+                                </a>
+                                {% endif %} -->
+                                {% if request.user|has_group:'PM' %}
+                                <a href="#">
+                                    <span class="icon-box-2x tooltip-sm" data-tooltip="Delete" onclick="deletePosition('{{ details.rec_id }}')">
+                                        <i class="fa fa-trash-alt" ></i>
+                                    </span>
+                                </a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor%}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

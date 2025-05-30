@@ -1,0 +1,66 @@
+{% extends 'base.html' %} {% block content %}
+
+<main class="main">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-6">
+                <h1 class="page-header">Profile</h1>
+                <div class="panel panel-default">
+                <div class="panel-heading">Basic Details</div>
+                <div class="panel-body">
+
+                <form role="form" name="profile_form">
+                        <div class="form-group col-lg-12 row">
+                            <label>Employee ID</label>
+                            <input class="form-control"  name="id"  disabled="">
+                        </div>
+
+                        <div class="form-group col-lg-12 row">
+                            <label>Name</label>
+                            <input class="form-control" name="name"  disabled="">
+                        </div>
+
+                        <div class="form-group col-lg-12 row">
+                            <label>Qualification</label>
+                            <input class="form-control" name="name"  disabled="">
+                        </div>
+
+                        <div class="form-group col-lg-12 row">
+                            <label>Date of Joining</label>
+                            <input class="form-control"  name="doj"  disabled="">
+                        </div>
+
+                        <div class="form-group col-lg-12 row">
+                            <label>Department</label>
+                            <input class="form-control"  name="department"  disabled="">
+                        </div>
+
+
+                        <div class="form-group col-lg-12 row">
+                            <label>Client Name</label>
+                            <input class="form-control"  name="clientname"  disabled="">
+                        </div>
+
+                        <div class="form-group col-lg-12 row">
+                            <label>Msys Email</label>
+                            <input class="form-control"  name="msys_email"  disabled="">
+                        </div>
+
+                        <div class="form-group col-lg-12 row">
+                            <label>Designation</label>
+                            <input class="form-control"  name="designation" disabled="">
+                        </div>
+
+                        <div class="form-group col-lg-12 row">
+                            <label>Manager Name</label>
+                            <input class="form-control"  name="managername" disabled="">
+                        </div>
+                </form>
+                </div>
+                </div>
+                </div>
+            </div>
+        </div>
+
+</main>
+{% endblock %}
